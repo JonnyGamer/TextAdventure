@@ -46,18 +46,18 @@ public struct Help {
     }
 
     /// The user must input a valid option. `let response = input(["a", "b", "c"])`
-    public static func input(_ options: [String]) -> String {
+    fileprivate static func input(options: [String]) -> String {
         let result = input()
         if options.contains(result) {
             return result
         }
         print("You must choose one of the following: \(options.map({String($0)}).joined(separator: ", "))")
-        return input(options)
+        return input(options: options)
     }
     
     /// The user must input a valid option. `let response = input("a", "b", "c")`
     public static func input(_ options: String...) -> String {
-        return Help.input(options)
+        return Help.input(options: options)
     }
 
     /// The user must input an Int. `let response: Int = inputInt()`
@@ -73,49 +73,49 @@ public struct Help {
     public static func inputInt(between: Int, and: Int) -> Int {
         return input_i_range(between: between...and)
     }
-    /// The user must input an Int between a range. `let response: Int = inputInt(1...10)`
-    public static func inputIntRange(_ between: ClosedRange<Int>) -> Int {
-        return input_i_range(between: between)
-    }
+//    /// The user must input an Int between a range. `let response: Int = inputInt(1...10)`
+//    public static func inputIntRange(_ between: ClosedRange<Int>) -> Int {
+//        return input_i_range(between: between)
+//    }
     private static func input_i_range(between: ClosedRange<Int>, retry: Bool = false) -> Int {
         if retry { print("(Please input a number between \(between.lowerBound) and \(between.upperBound)") }
         let r = Help.inputInt()
         return between.contains(r) ? r : input_i_range(between: between, retry: true)
     }
     
-    /// The user must input a Double. `let response: Double = inputDouble()`
-    public static func inputDouble() -> Double {
-        return input_d()
-    }
-    private static func input_d(retry: Bool = false) -> Double {
-        if retry { print("(Please input an Double i.e. 3.1415)") }
-        return Double(Help.input()) ?? input_d(retry: true)
-    }
-
-    /// The user must input a Double between a range. `let response: Double = inputDouble(between: 1.0, and: 10.0)`
-    public static func inputDouble(between: Double, and: Double) -> Double {
-        return input_d_range(between: between...and)
-    }
-    /// The user must input a Double between a range. `let response: Int = inputInt(1.0...10.0)`
-    public static func inputDoubleRange(_ between: ClosedRange<Double>) -> Double {
-        return input_d_range(between: between)
-    }
-    private static func input_d_range(between: ClosedRange<Double>, retry: Bool = false) -> Double {
-        if retry { print("(Please input a number between \(between.lowerBound) and \(between.upperBound)") }
-        let r = Help.inputDouble()
-        return between.contains(r) ? r : input_d_range(between: between, retry: true)
-    }
+//    /// The user must input a Double. `let response: Double = inputDouble()`
+//    public static func inputDouble() -> Double {
+//        return input_d()
+//    }
+//    private static func input_d(retry: Bool = false) -> Double {
+//        if retry { print("(Please input an Double i.e. 3.1415)") }
+//        return Double(Help.input()) ?? input_d(retry: true)
+//    }
+//
+//    /// The user must input a Double between a range. `let response: Double = inputDouble(between: 1.0, and: 10.0)`
+//    public static func inputDouble(between: Double, and: Double) -> Double {
+//        return input_d_range(between: between...and)
+//    }
+//    /// The user must input a Double between a range. `let response: Int = inputInt(1.0...10.0)`
+//    public static func inputDoubleRange(_ between: ClosedRange<Double>) -> Double {
+//        return input_d_range(between: between)
+//    }
+//    private static func input_d_range(between: ClosedRange<Double>, retry: Bool = false) -> Double {
+//        if retry { print("(Please input a number between \(between.lowerBound) and \(between.upperBound)") }
+//        let r = Help.inputDouble()
+//        return between.contains(r) ? r : input_d_range(between: between, retry: true)
+//    }
     
-    /// Force the user to input either Yes or No
-    public static func inputYN() -> YesOrNo {
-        return input_yn()
-    }
-    // public static var yes: YesOrNo = .yes
-    // public static var no: YesOrNo = .no
-    private static  func input_yn(retry: Bool = false) -> YesOrNo {
-        if retry { print("(Please input either yes or no)") }
-        return YesOrNo.init(rawValue: input().lowercased()) ?? input_yn(retry: true)
-    }
+//    /// Force the user to input either Yes or No
+//    public static func inputYN() -> YesOrNo {
+//        return input_yn()
+//    }
+//    // public static var yes: YesOrNo = .yes
+//    // public static var no: YesOrNo = .no
+//    private static  func input_yn(retry: Bool = false) -> YesOrNo {
+//        if retry { print("(Please input either yes or no)") }
+//        return YesOrNo.init(rawValue: input().lowercased()) ?? input_yn(retry: true)
+//    }
     
     private static var _askAgain: [Bool] = []
     /// Ask a question via `ask { /* Question */ }` if you don't like the response, insert `return askAgain()`
@@ -169,8 +169,8 @@ public struct Help {
         }
         printSlowly("Good Game!")
         printSlowly("Play Again? Yes or No?")
-        let repeatGame = inputYN()
-        if repeatGame == .yes {
+        let repeatGame = input("yes", "no")// inputYN()
+        if repeatGame == "yes" {
             twentyQuestions()
         } else {
             printSlowly("Thanks for playing!")
@@ -219,9 +219,9 @@ public struct Help {
         }
         
         printSlowly("Good Game!")
-        printSlowly("Play Again? Yes or No?")
-        let repeatGame = inputYN()
-        if repeatGame == .yes {
+        printSlowly("Play Again? yes or no?")
+        let repeatGame = input("yes", "no")// inputYN()
+        if repeatGame == "yes" {
             twentyQuestions()
         } else {
             printSlowly("Thanks for playing!")
@@ -252,14 +252,14 @@ public func input() -> String {
     Help.input()
 }
 
-/// The user must input a valid option.
-public func input(_ options: [String]) -> String {
-    Help.input(options)
-}
+///// The user must input a valid option.
+//public func input(_ options: [String]) -> String {
+//    Help.input(options)
+//}
 
 /// The user must input a valid option.
 public func input(_ options: String...) -> String {
-    return input(options)
+    return Help.input(options: options)
 }
 
 /// The user must input an Int.
@@ -270,34 +270,34 @@ public func inputInt() -> Int {
 public func inputInt(between: Int, and: Int) -> Int {
     return Help.inputInt(between: between, and: and)
 }
-/// The user must input an Int between a range. `let response: Int = inputInt(1...10)`
-public func inputIntRange(_ between: ClosedRange<Int>) -> Int {
-    return Help.inputIntRange(between)
-}
-
-/// The user must input a Double.
-public func inputDouble() -> Double {
-    return Help.inputDouble()
-}
-/// The user must input a Double between a range. `let response: Double = inputDouble(between: 1.0, and: 10.0)`
-public func inputDouble(between: Double, and: Double) -> Double {
-    return Help.inputDouble(between: between, and: and)
-}
-/// The user must input a Double between a range. `let response: Int = inputInt(1.0...10.0)`
-public func inputDoubleRange(_ between: ClosedRange<Double>) -> Double {
-    return Help.inputDoubleRange(between)
-}
-
-/// Force the user to input either Yes or No
-public func inputYN() -> YesOrNo {
-    return Help.inputYN()
-}
-/// A Yes or No type. Equivalent to the Boolean!
-public enum YesOrNo: String { case yes, no }
-/// yes
-public var yes: YesOrNo = .yes
-/// no
-public var no: YesOrNo = .no
+///// The user must input an Int between a range. `let response: Int = inputInt(1...10)`
+//public func inputIntRange(_ between: ClosedRange<Int>) -> Int {
+//    return Help.inputIntRange(between)
+//}
+//
+///// The user must input a Double.
+//public func inputDouble() -> Double {
+//    return Help.inputDouble()
+//}
+///// The user must input a Double between a range. `let response: Double = inputDouble(between: 1.0, and: 10.0)`
+//public func inputDouble(between: Double, and: Double) -> Double {
+//    return Help.inputDouble(between: between, and: and)
+//}
+///// The user must input a Double between a range. `let response: Int = inputInt(1.0...10.0)`
+//public func inputDoubleRange(_ between: ClosedRange<Double>) -> Double {
+//    return Help.inputDoubleRange(between)
+//}
+//
+///// Force the user to input either Yes or No
+//public func inputYN() -> YesOrNo {
+//    return Help.inputYN()
+//}
+///// A Yes or No type. Equivalent to the Boolean!
+//public enum YesOrNo: String { case yes, no }
+///// yes
+//public var yes: YesOrNo = .yes
+///// no
+//public var no: YesOrNo = .no
 
 /// Ask a question via `ask { /* Question */ }` if you don't like the response, insert `return askAgain()`
 public func ask(_ question: () -> ()) {
